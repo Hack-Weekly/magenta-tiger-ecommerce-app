@@ -61,7 +61,7 @@ export async function signInWithGoogle() {
         console.log(error);
     }
 }
-// just signs the user in using firebase signin func
+
 export async function logInWithEmailAndPassword(
     email: string,
     password: string
@@ -73,7 +73,6 @@ export async function logInWithEmailAndPassword(
             collection(db, "users"),
             where("uid", "==", user.uid)
         );
-        //this looks for the user
         const docs = await getDocs(queryDb);
     } catch (error) {
         console.log(error);
