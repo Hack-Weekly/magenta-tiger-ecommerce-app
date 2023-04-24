@@ -13,9 +13,6 @@ import {
     getAuth,
     GoogleAuthProvider,
     signInWithPopup,
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    sendPasswordResetEmail,
     signOut,
     Auth,
 } from "firebase/auth";
@@ -57,57 +54,6 @@ export async function signInWithGoogle() {
         }
     } catch (error) {
         console.log(error);
-    }
-}
-
-export async function logInWithEmailAndPassword(
-    email: string,
-    password: string
-) {
-    try {
-        const result = await signInWithEmailAndPassword(auth, email, password);
-        const user = result.user;
-        const queryDb = query(
-            collection(db, "users"),
-            where("uid", "==", user.uid)
-        );
-        const docs = await getDocs(queryDb);
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-export async function registerWithEmailAndPassword(
-    name: string,
-    email: string,
-    password: string
-) {
-    try {
-        const result = await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
-        );
-        const user = result.user;
-        await addDoc(collection(db, "users"), {
-            uid: user.uid,
-            name,
-            authProvider: "local",
-            email,
-        });
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
-
-export async function sendPasswordReset(email: string) {
-    try {
-        await sendPasswordResetEmail(auth, email);
-        alert("Password reset link sent!");
-    } catch (error) {
-        console.log(error);
-        throw error;
     }
 }
 
