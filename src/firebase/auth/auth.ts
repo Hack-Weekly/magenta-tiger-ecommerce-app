@@ -46,9 +46,7 @@ export async function signInWithGoogle() {
             collection(db, "users"),
             where("uid", "==", user.uid)
         );
-        //this looks for the user
         const docs = await getDocs(queryDb);
-        //if nothing is returned, it's a new user so add to db
         if (docs.docs.length === 0) {
             await addDoc(collection(db, "users"), {
                 uid: user.uid,
