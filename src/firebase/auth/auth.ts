@@ -22,19 +22,6 @@ export const auth: Auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();
 
-export function getErrorMessage(error: FirebaseError) {
-    switch (error.code) {
-        case "auth/user-not-found":
-            return "Invalid email or password";
-        case "auth/wrong-password":
-            return "Invalid email or password";
-        case "auth/too-many-requests":
-            return "Too many unsuccessful login attempts. Please try again later.";
-        default:
-            return "An error occurred. Please try again.";
-    }
-}
-
 export async function signInWithGoogle() {
     try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -60,7 +47,7 @@ export async function signInWithGoogle() {
 export async function logout() {
     try {
         await signOut(auth);
-    } catch (error) {
-        throw error;
+    } catch (err) {
+        throw err;
     }
 }
