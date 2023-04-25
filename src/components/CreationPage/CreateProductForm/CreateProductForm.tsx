@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
+import { nanoid } from 'nanoid';
 import {
   Form,
   Title,
@@ -6,45 +7,168 @@ import {
   Input,
   Textarea,
   Button,
+  FileUploadWrapper,
+  ImagePreview,
+  SubTitle,
+  ErrorMessage,
 } from './CreateProductForm.styles';
+import { Product } from '../../../types/Product.types';
+
+// Dummy data for testing, REMOVE later
+const user = {
+  displayName: 'Marcus Aurelius',
+  photoURL: 'https://avatars.githubusercontent.com/u/111042761?v=4',
+  uid: 'abc123',
+};
 
 const CreateProductForm = () => {
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isCreatingProduct, seIsCreatingProduct] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [image, setImage] = useState<File | null>(null);
+  const [productState, setProductState] = useState<Product>({
+    id: nanoid(),
+    title: '',
+    description: '',
+    price: '',
+    image: null,
+    metadata: {
+      author: {
+        name: user?.displayName,
+        photoUrl: user?.photoURL,
+        uid: user?.uid,
+      },
+      createdAt: Date.now(),
+    },
+  });
+
+  console.log(productState);
+
+  const imagePreviewURL = image ? URL.createObjectURL(image) : undefined;
+
+  const handleFormChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = event.target;
+
+    setProductState((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {};
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (!image) {
+      setErrorMessage('Please, select image');
+    }
+
+    try {
+      seIsCreatingProduct(true);
+      // Form submission via firebase
+
+      // Cleaning form after successful creating
+      setProductState({
+        id: nanoid(),
+        title: '',
+        description: '',
+        price: '',
+        image: null,
+        metadata: {
+          author: {
+            name: user?.displayName,
+            photoUrl: user?.photoURL,
+            uid: user?.uid,
+          },
+          createdAt: Date.now(),
+        },
+      });
+      setImage(null);
+      seIsCreatingProduct(false);
+    } catch (err: any) {
+      setErrorMessage(err);
+      seIsCreatingProduct(false);
+    }
+  };
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const imageFile = event.target.files[0];
+
+      setImage(imageFile);
+
+      setProductState((prev) => ({
+        ...prev,
+        image: imageFile,
+      }));
+    }
+  };
 
   return (
     <Form onSubmit={handleSubmit}>
       <Title>Create Product</Title>
+
       <Label htmlFor="title">Title:</Label>
-      <Input type="text" id="title" name="title" required />
+      <Input
+        value={productState.title}
+        type="text"
+        name="title"
+        required
+        onChange={handleFormChange}
+      />
 
       <Label htmlFor="description">Description:</Label>
-      <Textarea id="description" name="description" required></Textarea>
+      <Textarea
+        value={productState.description}
+        name="description"
+        required
+        onChange={handleFormChange}
+      />
 
       <Label htmlFor="price">Price:</Label>
       <Input
+        value={productState.price}
         type="number"
-        id="price"
         name="price"
         min="0"
         step="0.01"
         required
+        onChange={handleFormChange}
       />
 
-      <Label htmlFor="image">Image:</Label>
-      <Input
-        type="file"
-        id="image"
-        name="image"
-        accept="image/*"
-        onChange={handleImageUpload}
-        required
-      />
+      <FileUploadWrapper>
+        <Label htmlFor="image">Image:</Label>
+        <Button onClick={() => fileInputRef.current?.click()}>
+          {image ? 'Upload another image' : 'Upload image'}
+        </Button>
+        <Input
+          ref={fileInputRef}
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={handleImageUpload}
+          required
+        />
 
-      <Button type="submit">Create Product</Button>
+        <SubTitle>
+          {image ? `Uploaded: ${image.name}` : `There are no images selected`}
+        </SubTitle>
+
+        {image && <ImagePreview src={imagePreviewURL} />}
+      </FileUploadWrapper>
+      {errorMessage.length !== 0 && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      <Button
+        type="submit"
+        disabled={
+          !productState.title?.length ||
+          !productState.description?.length ||
+          !productState.price?.length ||
+          productState.image === null
+        }
+      >
+        {isCreatingProduct ? 'Creating product' : 'Create product'}
+      </Button>
     </Form>
   );
 };
