@@ -11,9 +11,14 @@ import {
   ImagePreview,
   SubTitle,
   ErrorMessage,
+  ImagesWrapper,
+  RemoveButton,
+  ImagePreviewWrapper,
 } from './CreateProductForm.styles';
 import { Product } from '../../../types/Product.types';
 import { createProduct } from '@/firebase/product/products';
+import { Icon } from '@/components/Icon/Icon';
+import { faCircleNotch, faRemove } from '@fortawesome/free-solid-svg-icons';
 
 // Dummy data for testing, REMOVE later
 const user = {
@@ -26,7 +31,7 @@ const CreateProductForm = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isCreatingProduct, seIsCreatingProduct] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [image, setImage] = useState<File | null>(null);
+  const [images, setImages] = useState<File[] | null>(null);
   const [productState, setProductState] = useState<Product>({
     id: nanoid(),
     title: '',
@@ -43,8 +48,6 @@ const CreateProductForm = () => {
     },
   });
 
-  const imagePreviewURL = image ? URL.createObjectURL(image) : undefined;
-
   const handleFormChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -59,14 +62,15 @@ const CreateProductForm = () => {
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
 
-    if (!image) {
+    if (!images) {
       setErrorMessage('Please, select image');
-    } else if (user && image) {
+    } else if (!user) {
+      setErrorMessage('Please, sign up to account');
+    } else if (user && images) {
       try {
         seIsCreatingProduct(true);
 
-        await createProduct(productState, image);
-        console.log('created');
+        await createProduct(productState, images);
 
         // Cleaning form after successful creating
         setProductState({
@@ -84,10 +88,10 @@ const CreateProductForm = () => {
             createdAt: Date.now(),
           },
         });
-        setImage(null);
+        setImages(null);
         seIsCreatingProduct(false);
       } catch (err: any) {
-        setErrorMessage(err);
+        setErrorMessage(err.messsagge);
         seIsCreatingProduct(false);
         console.log(err);
       }
@@ -98,7 +102,23 @@ const CreateProductForm = () => {
     if (event.target.files) {
       const imageFile = event.target.files[0];
 
-      setImage(imageFile);
+      if (!images) {
+        setImages([imageFile]);
+      } else if (images) {
+        setImages((images) => images && [...images, imageFile]);
+      }
+    }
+  };
+
+  const handleImageRemove = (index: number) => {
+    if (images?.length === 1) {
+      setImages(null);
+    } else {
+      setImages((images) => {
+        const newImages = images && [...images];
+        newImages && newImages.splice(index, 1);
+        return newImages;
+      });
     }
   };
 
@@ -113,6 +133,7 @@ const CreateProductForm = () => {
         name="title"
         required
         onChange={handleFormChange}
+        placeholder="Enter title"
       />
 
       <Label htmlFor="description">Description:</Label>
@@ -121,6 +142,7 @@ const CreateProductForm = () => {
         name="description"
         required
         onChange={handleFormChange}
+        placeholder="Enter Description"
       />
 
       <Label htmlFor="price">Price:</Label>
@@ -132,13 +154,19 @@ const CreateProductForm = () => {
         step="0.01"
         required
         onChange={handleFormChange}
+        placeholder="Enter Price"
       />
 
       <FileUploadWrapper>
         <Label htmlFor="image">Image:</Label>
-        <Button onClick={() => fileInputRef.current?.click()}>
-          {image ? 'Upload another image' : 'Upload image'}
+        <SubTitle>Maximum 5 images to upload</SubTitle>
+        <Button
+          onClick={() => fileInputRef.current?.click()}
+          disabled={images !== null && images.length > 4}
+        >
+          {images ? 'Upload another image' : 'Upload image'}
         </Button>
+
         <Input
           ref={fileInputRef}
           type="file"
@@ -147,24 +175,46 @@ const CreateProductForm = () => {
           onChange={handleImageUpload}
           required
         />
-
-        <SubTitle>
-          {image ? `Uploaded: ${image.name}` : `There are no images selected`}
-        </SubTitle>
-
-        {image && <ImagePreview src={imagePreviewURL} />}
       </FileUploadWrapper>
+
+      {images && (
+        <ImagesWrapper>
+          {images.map((image, index) => {
+            return (
+              <ImagePreviewWrapper key={index}>
+                <RemoveButton
+                  title="Remove image"
+                  onClick={() => handleImageRemove(index)}
+                >
+                  <Icon icon={faRemove} />
+                </RemoveButton>
+                <ImagePreview
+                  src={URL.createObjectURL(image)}
+                  alt=""
+                ></ImagePreview>
+              </ImagePreviewWrapper>
+            );
+          })}
+        </ImagesWrapper>
+      )}
+
       {errorMessage.length !== 0 && <ErrorMessage>{errorMessage}</ErrorMessage>}
       <Button
         type="submit"
         disabled={
+          !user ||
           !productState.title?.length ||
           !productState.description?.length ||
           !productState.price?.length ||
-          image === null
+          images === null ||
+          isCreatingProduct
         }
       >
-        {isCreatingProduct ? 'Creating product' : 'Create product'}
+        {isCreatingProduct ? (
+          <Icon icon={faCircleNotch} spinning="true" />
+        ) : (
+          'Create product'
+        )}
       </Button>
     </Form>
   );

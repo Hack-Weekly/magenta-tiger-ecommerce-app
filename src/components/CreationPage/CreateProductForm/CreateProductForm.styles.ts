@@ -5,6 +5,7 @@ const Form = styled.form`
   flex-direction: column;
   gap: 0.3rem;
   width: 100%;
+  height: 100%;
   max-width: 30rem;
   input,
   textarea {
@@ -13,6 +14,21 @@ const Form = styled.form`
     border-radius: 0.2rem;
     border: 0.1rem solid #d9d9d9;
     padding: 0.2rem 0.5rem;
+    ::placeholder {
+      font-size: 0.9rem;
+      letter-spacing: -0.01rem;
+      color: #9b9b9b;
+    }
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  /* Works for Firefox */
+  input[type='number'] {
+    -moz-appearance: textfield;
   }
 `;
 
@@ -71,26 +87,64 @@ const FileUploadWrapper = styled.div`
     &:focus {
       background-color: #c4f46e;
     }
+    &:disabled {
+      background-color: #cacaca;
+      cursor: default;
+    }
   }
   input {
     display: none;
   }
 `;
 
+const ImagesWrapper = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+  height: 100%;
+  align-items: flex-start;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+`;
+
+const ImagePreviewWrapper = styled.div`
+  position: relative;
+  height: 5rem;
+  width: 5rem;
+`;
+
 const ImagePreview = styled.img`
   max-width: 100%;
+  height: 100%;
   width: 100%;
-  max-height: 14rem;
-  margin-top: 1rem;
-  object-fit: contain;
+  object-fit: cover;
   border-radius: 0.4rem;
+  z-index: 1;
+  background-color: #dbdbdb4f;
+`;
+
+const RemoveButton = styled.button`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-color: #eee !important;
+  color: #2c2c2c;
+  left: 0.2rem;
+  top: 0.2rem;
+  height: 1.5rem;
+  width: 1.5rem;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 2;
+  border-radius: 50%;
 `;
 
 const SubTitle = styled.p`
   color: #5e5e5e;
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
-  margin-top: 0.5rem;
   font-weight: 300;
 `;
 
@@ -114,4 +168,7 @@ export {
   ImagePreview,
   SubTitle,
   ErrorMessage,
+  ImagesWrapper,
+  RemoveButton,
+  ImagePreviewWrapper,
 };

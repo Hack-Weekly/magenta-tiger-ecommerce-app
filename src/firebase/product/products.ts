@@ -15,7 +15,7 @@ import { db, storage } from '../firebase';
 
 const user = auth.currentUser;
 
-export const createProduct = async (product: Product, image: File) => {
+export const createProduct = async (product: Product, images: File[]) => {
   if (user) {
     try {
       const productsRef = collection(db, 'products');
@@ -27,24 +27,31 @@ export const createProduct = async (product: Product, image: File) => {
 
       const q = query(productsRef, where('product.id', '==', product.id));
 
-      const fileRef = ref(storage, `productImages/${user.uid}/${product.id}`);
-      await uploadBytes(fileRef, image);
+      for (let i = 0; i < images.length; i++) {
+        const file = images[i];
+        const fileRef = ref(
+          storage,
+          `productImages/${user.uid}/${product.id}_${i}`
+        );
+        await uploadBytes(fileRef, file);
+        const downloadURL = await getDownloadURL(fileRef);
+        const snapshot = await getDocs(q);
 
-      const downloadURL = await getDownloadURL(fileRef);
+        snapshot.forEach((product) => {
+          const productId = product.id;
+          const data = product.data().product;
 
-      const snapshot = await getDocs(q);
-
-      snapshot.forEach((product) => {
-        const productId = product.id;
-        const data = product.data().product;
-
-        updateDoc(doc(db, 'products', productId), {
-          product: {
-            ...data,
-            image: downloadURL,
-          },
+          updateDoc(doc(db, 'products', productId), {
+            product: {
+              ...data,
+              images: [
+                ...(data.images || []), // add previous images if any
+                downloadURL,
+              ],
+            },
+          });
         });
-      });
+      }
     } catch (err) {
       throw err;
     }
