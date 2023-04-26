@@ -82,7 +82,7 @@ const ImagePreview = styled.img`
   width: 100%;
   max-height: 14rem;
   margin-top: 1rem;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 0.4rem;
 `;
 

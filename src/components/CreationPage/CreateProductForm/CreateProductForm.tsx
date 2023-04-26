@@ -13,6 +13,7 @@ import {
   ErrorMessage,
 } from './CreateProductForm.styles';
 import { Product } from '../../../types/Product.types';
+import { createProduct } from '@/firebase/product/products';
 
 // Dummy data for testing, REMOVE later
 const user = {
@@ -42,8 +43,6 @@ const CreateProductForm = () => {
     },
   });
 
-  console.log(productState);
-
   const imagePreviewURL = image ? URL.createObjectURL(image) : undefined;
 
   const handleFormChange = (
@@ -62,33 +61,36 @@ const CreateProductForm = () => {
 
     if (!image) {
       setErrorMessage('Please, select image');
-    }
+    } else if (user && image) {
+      try {
+        seIsCreatingProduct(true);
 
-    try {
-      seIsCreatingProduct(true);
-      // Form submission via firebase
+        await createProduct(productState, image);
+        console.log('created');
 
-      // Cleaning form after successful creating
-      setProductState({
-        id: nanoid(),
-        title: '',
-        description: '',
-        price: '',
-        image: null,
-        metadata: {
-          author: {
-            name: user?.displayName,
-            photoUrl: user?.photoURL,
-            uid: user?.uid,
+        // Cleaning form after successful creating
+        setProductState({
+          id: nanoid(),
+          title: '',
+          description: '',
+          price: '',
+          image: null,
+          metadata: {
+            author: {
+              name: user?.displayName,
+              photoUrl: user?.photoURL,
+              uid: user?.uid,
+            },
+            createdAt: Date.now(),
           },
-          createdAt: Date.now(),
-        },
-      });
-      setImage(null);
-      seIsCreatingProduct(false);
-    } catch (err: any) {
-      setErrorMessage(err);
-      seIsCreatingProduct(false);
+        });
+        setImage(null);
+        seIsCreatingProduct(false);
+      } catch (err: any) {
+        setErrorMessage(err);
+        seIsCreatingProduct(false);
+        console.log(err);
+      }
     }
   };
 
@@ -97,11 +99,6 @@ const CreateProductForm = () => {
       const imageFile = event.target.files[0];
 
       setImage(imageFile);
-
-      setProductState((prev) => ({
-        ...prev,
-        image: imageFile,
-      }));
     }
   };
 
@@ -164,7 +161,7 @@ const CreateProductForm = () => {
           !productState.title?.length ||
           !productState.description?.length ||
           !productState.price?.length ||
-          productState.image === null
+          image === null
         }
       >
         {isCreatingProduct ? 'Creating product' : 'Create product'}

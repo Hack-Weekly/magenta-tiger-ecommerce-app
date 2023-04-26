@@ -1,12 +1,5 @@
-import { app } from '../firebase';
-import {
-  query,
-  getDocs,
-  collection,
-  where,
-  addDoc,
-  getFirestore,
-} from 'firebase/firestore';
+import { app, db } from '../firebase';
+import { query, getDocs, collection, where, addDoc } from 'firebase/firestore';
 
 import {
   getAuth,
@@ -16,7 +9,6 @@ import {
   Auth,
 } from 'firebase/auth';
 
-export const db = getFirestore(app);
 export const auth: Auth = getAuth(app);
 
 const googleProvider = new GoogleAuthProvider();

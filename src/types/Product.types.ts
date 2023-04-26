@@ -3,7 +3,7 @@ export type Product = {
   title?: string;
   description?: string;
   price?: string;
-  image?: null | File;
+  image?: null | string;
   metadata: {
     author: {
       name?: string;
