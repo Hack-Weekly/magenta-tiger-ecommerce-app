@@ -11,7 +11,7 @@ import {
     StyledTitleRowContainer,
     StyledGoogleLoginButton,
     StyledParagraph,
-} from "./Login.style";
+} from "../../styles/style-components/Login.styles";
 
 function Login() {
     const [user, loading, error] = useAuthState(auth);
