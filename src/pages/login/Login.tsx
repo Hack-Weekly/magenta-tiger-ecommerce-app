@@ -54,7 +54,6 @@ const StyledTextContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
     color: black;
     input[type="text"],
     input[type="password"] {
@@ -124,7 +123,7 @@ function Login() {
                     <StyledTextContainer>
                         <StyledTitleRowContainer>
                             <h1>Sign in</h1>
-                            <a href="#">I don't have an account</a>
+                            <a href="#">I don&apos;t have an account</a>
                         </StyledTitleRowContainer>
                         <input placeholder="Email" type="text" />
                         <input placeholder="Password" type="password" />
