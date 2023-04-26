@@ -37,7 +37,7 @@ const CreateProductForm = () => {
     title: '',
     description: '',
     price: '',
-    image: null,
+    images: null,
     metadata: {
       author: {
         name: user?.displayName,
@@ -45,6 +45,7 @@ const CreateProductForm = () => {
         uid: user?.uid,
       },
       createdAt: Date.now(),
+      lastModifiedAt: Date.now(),
     },
   });
 
@@ -78,7 +79,7 @@ const CreateProductForm = () => {
           title: '',
           description: '',
           price: '',
-          image: null,
+          images: null,
           metadata: {
             author: {
               name: user?.displayName,
@@ -86,6 +87,7 @@ const CreateProductForm = () => {
               uid: user?.uid,
             },
             createdAt: Date.now(),
+            lastModifiedAt: Date.now(),
           },
         });
         setImages(null);
@@ -161,8 +163,9 @@ const CreateProductForm = () => {
         <Label htmlFor="image">Image:</Label>
         <SubTitle>Maximum 5 images to upload</SubTitle>
         <Button
+          type="button"
           onClick={() => fileInputRef.current?.click()}
-          disabled={images !== null && images.length > 4}
+          disabled={images !== null && images.length > 4 && isCreatingProduct}
         >
           {images ? 'Upload another image' : 'Upload image'}
         </Button>
@@ -183,8 +186,10 @@ const CreateProductForm = () => {
             return (
               <ImagePreviewWrapper key={index}>
                 <RemoveButton
+                  type="button"
                   title="Remove image"
                   onClick={() => handleImageRemove(index)}
+                  disabled={isCreatingProduct}
                 >
                   <Icon icon={faRemove} />
                 </RemoveButton>
