@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-const Form = styled.form`
+const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
@@ -32,24 +32,24 @@ const Form = styled.form`
   }
 `;
 
-const Title = styled.h2`
+const StyledTitle = styled.h2`
   font-family: 'Inter', sans-serif;
   color: #2c2c2c;
 `;
 
-const Label = styled.label`
+const StyledLabel = styled.label`
   color: #5e5e5e;
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
 `;
 
-const Input = styled.input`
+const StyledInput = styled.input`
   &:focus {
     outline: none;
   }
 `;
 
-const Textarea = styled.textarea`
+const StyledTextarea = styled.textarea`
   min-width: 100%;
   resize: vertical;
 
@@ -58,7 +58,7 @@ const Textarea = styled.textarea`
   }
 `;
 
-const Button = styled.button`
+const StyledButton = styled.button`
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   background-color: #aa96da;
@@ -75,7 +75,7 @@ const Button = styled.button`
   }
 `;
 
-const FileUploadWrapper = styled.div`
+const StyledFileUploadWrapper = styled.div`
   width: 100%;
   display: grid;
   margin-bottom: 1rem;
@@ -97,7 +97,7 @@ const FileUploadWrapper = styled.div`
   }
 `;
 
-const ImagesWrapper = styled.div`
+const StyledImagesWrapper = styled.div`
   display: flex;
   gap: 0.5rem;
   width: 100%;
@@ -108,13 +108,13 @@ const ImagesWrapper = styled.div`
   margin-bottom: 1rem;
 `;
 
-const ImagePreviewWrapper = styled.div`
+const StyledImagePreviewWrapper = styled.div`
   position: relative;
   height: 5rem;
   width: 5rem;
 `;
 
-const ImagePreview = styled.img`
+const StyledImagePreview = styled.img`
   max-width: 100%;
   height: 100%;
   width: 100%;
@@ -124,7 +124,7 @@ const ImagePreview = styled.img`
   background-color: #dbdbdb4f;
 `;
 
-const RemoveButton = styled.button`
+const StyledRemoveButton = styled.button`
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -141,14 +141,14 @@ const RemoveButton = styled.button`
   border-radius: 50%;
 `;
 
-const SubTitle = styled.p`
+const StyledSubTitle = styled.p`
   color: #5e5e5e;
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
   font-weight: 300;
 `;
 
-const ErrorMessage = styled.p`
+const StyledErrorMessage = styled.p`
   color: #d23c3c;
   font-family: 'Inter', sans-serif;
   font-size: 0.8rem;
@@ -158,17 +158,17 @@ const ErrorMessage = styled.p`
 `;
 
 export {
-  Form,
-  Title,
-  Label,
-  Input,
-  Textarea,
-  Button,
-  FileUploadWrapper,
-  ImagePreview,
-  SubTitle,
-  ErrorMessage,
-  ImagesWrapper,
-  RemoveButton,
-  ImagePreviewWrapper,
+  StyledForm,
+  StyledTitle,
+  StyledLabel,
+  StyledInput,
+  StyledTextarea,
+  StyledButton,
+  StyledFileUploadWrapper,
+  StyledImagePreview,
+  StyledSubTitle,
+  StyledErrorMessage,
+  StyledImagesWrapper,
+  StyledRemoveButton,
+  StyledImagePreviewWrapper,
 };

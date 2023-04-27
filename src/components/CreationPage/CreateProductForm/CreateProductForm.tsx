@@ -1,20 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { nanoid } from 'nanoid';
 import {
-  Form,
-  Title,
-  Label,
-  Input,
-  Textarea,
-  Button,
-  FileUploadWrapper,
-  ImagePreview,
-  SubTitle,
-  ErrorMessage,
-  ImagesWrapper,
-  RemoveButton,
-  ImagePreviewWrapper,
-} from './CreateProductForm.styles';
+  StyledForm,
+  StyledTitle,
+  StyledLabel,
+  StyledInput,
+  StyledTextarea,
+  StyledButton,
+  StyledFileUploadWrapper,
+  StyledImagePreview,
+  StyledSubTitle,
+  StyledErrorMessage,
+  StyledImagesWrapper,
+  StyledRemoveButton,
+  StyledImagePreviewWrapper,
+} from './StyledCreateProductForm.styles';
 import { Product } from '../../../types/Product.types';
 import { createProduct } from '@/firebase/product/products';
 import { Icon } from '@/components/Icon/Icon';
@@ -125,11 +125,11 @@ const CreateProductForm = () => {
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <Title>Create Product</Title>
+    <StyledForm onSubmit={handleSubmit}>
+      <StyledTitle>Create Product</StyledTitle>
 
-      <Label htmlFor="title">Title:</Label>
-      <Input
+      <StyledLabel htmlFor="title">Title:</StyledLabel>
+      <StyledInput
         value={productState.title}
         type="text"
         name="title"
@@ -138,8 +138,8 @@ const CreateProductForm = () => {
         placeholder="Enter title"
       />
 
-      <Label htmlFor="description">Description:</Label>
-      <Textarea
+      <StyledLabel htmlFor="description">Description:</StyledLabel>
+      <StyledTextarea
         value={productState.description}
         name="description"
         required
@@ -147,8 +147,8 @@ const CreateProductForm = () => {
         placeholder="Enter Description"
       />
 
-      <Label htmlFor="price">Price:</Label>
-      <Input
+      <StyledLabel htmlFor="price">Price:</StyledLabel>
+      <StyledInput
         value={productState.price}
         type="number"
         name="price"
@@ -159,18 +159,18 @@ const CreateProductForm = () => {
         placeholder="Enter Price"
       />
 
-      <FileUploadWrapper>
-        <Label htmlFor="image">Image:</Label>
-        <SubTitle>Maximum 5 images to upload</SubTitle>
-        <Button
+      <StyledFileUploadWrapper>
+        <StyledLabel htmlFor="image">Image:</StyledLabel>
+        <StyledSubTitle>Maximum 5 images to upload</StyledSubTitle>
+        <StyledButton
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={images !== null && images.length > 4 && isCreatingProduct}
         >
           {images ? 'Upload another image' : 'Upload image'}
-        </Button>
+        </StyledButton>
 
-        <Input
+        <StyledInput
           ref={fileInputRef}
           type="file"
           name="image"
@@ -178,33 +178,35 @@ const CreateProductForm = () => {
           onChange={handleImageUpload}
           required
         />
-      </FileUploadWrapper>
+      </StyledFileUploadWrapper>
 
       {images && (
-        <ImagesWrapper>
+        <StyledImagesWrapper>
           {images.map((image, index) => {
             return (
-              <ImagePreviewWrapper key={index}>
-                <RemoveButton
+              <StyledImagePreviewWrapper key={index}>
+                <StyledRemoveButton
                   type="button"
                   title="Remove image"
                   onClick={() => handleImageRemove(index)}
                   disabled={isCreatingProduct}
                 >
                   <Icon icon={faRemove} />
-                </RemoveButton>
-                <ImagePreview
+                </StyledRemoveButton>
+                <StyledImagePreview
                   src={URL.createObjectURL(image)}
                   alt=""
-                ></ImagePreview>
-              </ImagePreviewWrapper>
+                ></StyledImagePreview>
+              </StyledImagePreviewWrapper>
             );
           })}
-        </ImagesWrapper>
+        </StyledImagesWrapper>
       )}
 
-      {errorMessage.length !== 0 && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      <Button
+      {errorMessage.length !== 0 && (
+        <StyledErrorMessage>{errorMessage}</StyledErrorMessage>
+      )}
+      <StyledButton
         type="submit"
         disabled={
           !user ||
@@ -220,8 +222,8 @@ const CreateProductForm = () => {
         ) : (
           'Create product'
         )}
-      </Button>
-    </Form>
+      </StyledButton>
+    </StyledForm>
   );
 };
 
