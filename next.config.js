@@ -8,13 +8,5 @@ const nextConfig = {
         styledComponents: true,
     },
 };
-  reactStrictMode: true,
-  env: {
-    BASE_URL: process.env.BASE_URL,
-  },
-  compiler: {
-    styledComponents: true,
-  },
-};
 
 module.exports = nextConfig;
