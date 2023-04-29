@@ -12,9 +12,11 @@ import {
     StyledGoogleLoginButton,
     StyledParagraph,
 } from "../../styles/style-components/Login.styles";
+import { useRouter } from "next/dist/client/router";
 
 function Login() {
     const [user, loading, error] = useAuthState(auth);
+    const router = useRouter();
 
     useEffect(() => {
         if (loading) {
@@ -22,6 +24,7 @@ function Login() {
         }
         if (user) {
             console.log("user active");
+            router.push(`/profile/${user.uid}`);
         }
     }, [user, loading]);
 
