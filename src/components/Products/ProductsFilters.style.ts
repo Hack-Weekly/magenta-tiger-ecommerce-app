@@ -36,6 +36,8 @@ export const StyledStarRatingWrapper = styled.ul`
 export const StyledStarRating = styled.ul`
    color:gold;
    font-size:2rem;
+   display: flext;
+   gap: 5px;
 `
 export const StyledPriceFilters = styled.input`
   height: 2em;

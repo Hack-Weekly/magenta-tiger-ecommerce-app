@@ -32,7 +32,11 @@ export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<Ge
                 ></StyledRatingRange>
                 <StyledStarRatingWrapper>
                     <StyledStarRating>
-                        ★★★★★
+                        <li>★</li>
+                        <li>★</li>
+                        <li>★</li>
+                        <li>★</li>
+                        <li>★</li>
                     </StyledStarRating>
                 </StyledStarRatingWrapper>
             </StyledFiltersContainer>
