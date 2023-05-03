@@ -11,7 +11,6 @@ import {
 } from './ProductsShowcase.style';
 
 const ProductCards = (products) => {
-    console.log(products)
     const productCards = [];
     for (let product of products) {
         let card = <StyledProductCards>

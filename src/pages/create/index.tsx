@@ -1,5 +1,5 @@
 import { CreateProductForm } from '@/components/CreationPage/CreateProductForm/CreateProductForm';
-import StyledContainer from '@/components/StyledContainer/StyledContainer';
+import {StyledContainer} from '@/components/StyledContainer/StyledContainer';
 
 export default function Web() {
   return (

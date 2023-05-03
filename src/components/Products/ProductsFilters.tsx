@@ -15,7 +15,6 @@ import {
 } from 'next';
 
 export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<GetServerSideProps>) => {
-    console.log('productTypes', productTypes)
     return (
         <StyledLeftAsideWrapper>
             <StyledTitleHeaders>Filter</StyledTitleHeaders>

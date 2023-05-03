@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { StyledContainerType } from './StyledContainer.types';
+import { StyledContainerVariant } from './StyledContainer.types';
 
-export const StyledContainer = styled.div<StyledContainerType>`
+export const StyledContainer = styled.div<StyledContainerVariant>`
   ${({ variant }) =>
     variant === 'create-page' &&
     css`
