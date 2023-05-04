@@ -14,6 +14,7 @@ export const StyledProductCards = styled.div`
     box-shadow:solid #e8e2e2;
     max-width:350px;
     padding:10px 10px;
+    cursor: pointer;
 `
 export const StyledProductImageContainer = styled.div`
     text-align:center;

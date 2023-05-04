@@ -19,7 +19,7 @@ export const StyledFiltersContainer = styled.div`
     padding-top:20px ;
     width: 100%;
 `
-export const StyledRatingRange = styled.input`
+export const StyledRRangeRating = styled.input`
 	height: 7px;
 	max-width: 19em;
 	background: blue;

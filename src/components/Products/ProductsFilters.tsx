@@ -2,7 +2,7 @@ import {
     StyledLeftAsideWrapper,
     StyledTitleHeaders,
     StyledFiltersContainer,
-    StyledRatingRange,
+    StyledRRangeRating,
     StyledStarRatingWrapper,
     StyledStarRating,
     StyledPriceFilters,
@@ -13,8 +13,29 @@ import {
     GetServerSideProps,
     InferGetServerSidePropsType
 } from 'next';
+import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<GetServerSideProps>) => {
+    const [selectedBrandFilter, setSelectedBrandFilter] = useState('');
+    const [rangeRatingSlider, setRangeRatingSlider] = useState('');
+    const [priceFilter, setPriceFilter] = useState('');
+    const router = useRouter();
+
+    // Set selected products brand for products filtering
+    const handleSelectedProductBrand = (event: React.ChangeEvent<HTMLInputElement>) => {
+        router.push(router.asPath)
+        setSelectedBrandFilter(event.target.value);
+    }
+
+    const handleRangeRatingSlider = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRangeRatingSlider(event.target.value);
+    }
+
+    const handlePriceFilter = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPriceFilter(event.target.value);
+    }
+
     return (
         <StyledLeftAsideWrapper>
             <StyledTitleHeaders>Filter</StyledTitleHeaders>
@@ -24,19 +45,16 @@ export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<Ge
             */}
             <StyledFiltersContainer>
                 <StyledTitleHeaders>Rating</StyledTitleHeaders>
-                <StyledRatingRange
+                <StyledRRangeRating
                     type="range"
                     name="rating"
                     min="1"
                     max="5"
-                ></StyledRatingRange>
+                    onChange={handleRangeRatingSlider}
+                ></StyledRRangeRating>
                 <StyledStarRatingWrapper>
                     <StyledStarRating>
-                        <li>★</li>
-                        <li>★</li>
-                        <li>★</li>
-                        <li>★</li>
-                        <li>★</li>
+                        <li key='1'>★</li>
                     </StyledStarRating>
                 </StyledStarRatingWrapper>
             </StyledFiltersContainer>
@@ -47,10 +65,12 @@ export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<Ge
                 <StyledPriceFilters
                     type="text"
                     placeholder="From  20, 000"
+                    onChange={handlePriceFilter}
                 ></StyledPriceFilters>
                 <StyledPriceFilters
                     type="text"
                     placeholder="To 50, 000"
+                    onChange={handlePriceFilter}
                 ></StyledPriceFilters>
             </StyledFiltersContainer>
 
@@ -58,15 +78,18 @@ export const ProductsFilters = ({ productTypes }: InferGetServerSidePropsType<Ge
             <StyledFiltersContainer>
                 <StyledTitleHeaders>Brang</StyledTitleHeaders>
                 {productTypes.map((productType: string, index: number) =>
-                    <StyledCheckBoxFiltersWrapper>
+                    <StyledCheckBoxFiltersWrapper key={productType}>
                         {index === 0 ?
                             <StyledCheckBoxFilters
                                 type="checkbox"
                                 key={productType}
+                                onChange={handleSelectedProductBrand}
                                 checked />
                             : <StyledCheckBoxFilters
                                 type="checkbox"
-                                key={productType} />}
+                                key={productType}
+                                onChange={handleSelectedProductBrand}
+                            />}
                         {productType}
                     </StyledCheckBoxFiltersWrapper>
                 )}

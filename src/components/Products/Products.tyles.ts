@@ -39,6 +39,9 @@ export const StyledSelectProductsFilter = styled.select`
     border: 1px solid #f5f6 ;
     box-shadow: 1px  1px  #f5f6;
 `
+export const StyledSelecteOption = styled.option`
+`
+
 export const StyledMainContentWrapper = styled.section`
     width:100%;
     height:100%;

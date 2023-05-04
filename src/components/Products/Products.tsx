@@ -5,6 +5,7 @@ import {
     StyledProductsArticle,
     StyledProductsSummary,
     StyledSelectProductsFilter,
+    StyledSelecteOption,
     StyledMainContentWrapper,
     StyledLeftAside,
     StyledMainGridContainer,
@@ -16,37 +17,53 @@ import {
     GetServerSideProps,
     InferGetServerSidePropsType
 } from 'next';
-import React, { useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link'
 
-export const Products = ({ products, params, productTypes }: InferGetServerSidePropsType<GetServerSideProps>) => {
-    const [selectedProductType, setSelectedProductType] = useState('all products');
+export const Products = ({ products, reqPath, productTypes }: InferGetServerSidePropsType<GetServerSideProps>) => {
+    const router = useRouter();
+    const [currenPagePath, setCurrenPagePath] = useState('')
 
-    // Set selected products types for products filtering
+    // Set selected products type for products filtering
     const handleSelectedProductType = (event: React.ChangeEvent<HTMLSelectElement>) => {
-        setSelectedProductType(event.target.value);
+        const selectedProductType = event.target.value
+        router.replace(`/products/${selectedProductType}`);
+        setCurrenPagePath(selectedProductType);
     }
+
+    useEffect(() => {
+        setCurrenPagePath(reqPath);
+    }, [setCurrenPagePath]);
 
     return (
         <StyledProductContainer>
             <StyledProductsHeaderContainer>
                 <StyledMainNavigator>
                     {
-                        params.map((param: string, index: number) => (
-                            <div key={param}>
-                                {param}
-                                {index + 1 !== params.length && <span>&#9656;</span>}
-                            </div>
-                        ))
+                        <div key={currenPagePath}>
+                            <Link href={"/products/all"}> products </Link>
+                            <span>&#9656;</span>
+                            <Link href={`/products/${currenPagePath}`}>{currenPagePath}</Link>
+                        </div>
+
                     }
                 </StyledMainNavigator>
                 <StyledProductsArticle>
-                    <StyledProductsSummary>{selectedProductType} {`(${products.length})`}</StyledProductsSummary>
+                    <StyledProductsSummary>{currenPagePath} {`(${products.length})`}</StyledProductsSummary>
                     <StyledSelectProductsFilter onChange={handleSelectedProductType}>
+                        <StyledSelecteOption
+                            key='selectProduct'
+                            defaultValue={'Select product type'}
+                        > Select product type
+                        </StyledSelecteOption>
                         {
                             productTypes.map((productType: string) => (
-                                <option value={productType} key={productType}>
-                                    {productType}
-                                </option>
+                                <StyledSelecteOption
+                                    key={productType}
+                                    value={productType}
+                                >{productType}
+                                </StyledSelecteOption>
                             ))
                         }
                     </StyledSelectProductsFilter>

@@ -6,13 +6,16 @@ import {
     InferGetServerSidePropsType
 } from 'next';
 import { useState } from 'react';
+import type { NextRequest, NextResponse } from "next/server";
+import { useRouter } from 'next/router';
 
-export default function Products({ products, params, productTypes }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
+export default function Products({ products, reqPath, productTypes }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     return (
         <StyledPageContainer >
             <ProductList
                 products={products}
-                params={params}
+                reqPath={reqPath}
                 productTypes={productTypes}
             />
         </StyledPageContainer>
@@ -24,7 +27,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         'Cache-Control',
         'public, s-maxage=10, stale-while-revalidate=59'
     )
-    let params = ['products', 'Smartphones'];
+    const reqPath = context.query.product;
 
     // We need a product type list
     let productTypes = ['Smartphones', 'Cloths', 'Shoes', 'Computers', 'Cars'];
@@ -32,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     // Wee need to add products color property to Products data
     let productColor = ['gold', 'green', 'black', 'orange'];
 
-    //{TO DO} Fetch products fro firebase storage here
+    //{TO DO} Fetch products fro firebase storage here using the "reqPath"
 
     // FOR TESTING:--simulate product list of 22 items
     let getProducts = () => {
@@ -60,5 +63,5 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return products;
     };
     let products = getProducts();
-    return { props: { products, params, productTypes } }
+    return { props: { products, reqPath, productTypes } }
 }
