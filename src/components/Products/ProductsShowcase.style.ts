@@ -26,7 +26,7 @@ export const StyledProductImage = styled.img`
     `
 export const StyledProductTitle = styled.div`
     font-size: 0.8em;
-    color: black
+    color: black;
     `
 export const StyledProductDescription = styled.div`
     font-size:0.9rem;
@@ -44,9 +44,9 @@ export const StyledProductColorsContainer = styled.div`
     align-items:end;
     gap:10px;
 `
-export const StyledProductColors = styled.div`
+export const StyledProductColors = styled.div<{ backgroundColor: string }>`
   height:12px;
   width:12px;
   border-radius:50px;
-  background: ${({ backgroundColor }) => backgroundColor};
+  background: ${({ backgroundColor }) => (backgroundColor)};
 `
