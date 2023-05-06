@@ -1,3 +1,3 @@
-export type StyledContainer = {
+export type StyledContainerVariant = {
   variant: 'create-page';
 };

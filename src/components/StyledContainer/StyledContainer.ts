@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components';
-import { StyledContainer } from './StyledContainer.types';
+import { StyledContainerVariant } from './StyledContainer.types';
 
-const StyledContainer = styled.div<StyledContainer>`
+export const StyledContainer = styled.div<StyledContainerVariant>`
   ${({ variant }) =>
     variant === 'create-page' &&
     css`
@@ -19,8 +19,12 @@ const StyledContainer = styled.div<StyledContainer>`
 `;
 
 export const StyledPageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  max-width: 90rem;
+  margin: 5rem auto;
 `;
-
-export default StyledContainer;
